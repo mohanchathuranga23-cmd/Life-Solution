@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LIFE SOLUTION — ජීවිත විසඳුම්</title>
+<style>
+  :root {
+    --bg: #09090d;
+    --card: #13131b;
+    --card-2: #191924;
+    --border: rgba(250, 204, 21, 0.24);
+    --gold: #facc15;
+    --gold-soft: #fde047;
+    --text: #f4f4f6;
+    --muted: #b4b4c2;
+    --ok: #22c55e;
+    --warn: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(circle at top, #1b1829 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Sinhala", sans-serif;
+    line-height: 1.65;
+    padding: 18px 14px 60px;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; }
+  .topbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  .brand { font-weight: 900; font-size: 16px; color: var(--gold-soft); letter-spacing: 0.4px; }
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .btn {
+    background: var(--gold);
+    color: #09090d;
+    border: none;
+    border-radius: 10px;
+    padding: 9px 14px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-ghost {
+    background: #222230;
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 600px) {
+    .tabs { grid-template-columns: 1fr; }
+  }
+  .tab-btn {
+    background: var(--card);
+    color: var(--muted);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 14px;
+    padding: 12px 12px;
+    font-size: 13.5px;
+    font-weight: 800;
+    cursor: pointer;
+    text-align: center;
+  }
+  .tab-btn.active {
+    background: var(--gold);
+    color: #09090d;
+    border-color: var(--gold);
+  }
+  .music-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 6px 10px;
+  }
+  .music-label { font-size: 11px; color: var(--gold-soft); font-weight: 700; }
+  input[type="range"] { width: 84px; accent-color: var(--gold); cursor: pointer; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  }
+  h1 { font-size: 23px; color: var(--gold-soft); margin-bottom: 6px; }
+  h2 { font-size: 18px; color: var(--gold-soft); margin-bottom: 8px; }
+  h3 { font-size: 15px; color: var(--text); margin-bottom: 6px; }
+  .muted { color: var(--muted); font-size: 13.5px; }
+  .badge {
+    display: inline-block;
+    background: rgba(250, 204, 21, 0.14);
+    color: var(--gold-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 11.5px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .field { margin-top: 10px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 520px) { .grid-2 { grid-template-columns: 1fr; } }
+  label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 4px; color: #e4e4ec; }
+  input, textarea {
+    width: 100%;
+    background: #0d0d13;
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  textarea { min-height: 76px; resize: vertical; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .chip {
+    background: #1d1d29;
+    border: 1px solid rgba(255,255,255,0.14);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12.5px;
+    cursor: pointer;
+  }
+  .chip.active { background: var(--gold); color: #09090d; font-weight: 800; border-color: var(--gold); }
+  .status-msg {
+    margin-top: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #bae6fd;
+  }
+  .warn-msg {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.42);
+    color: #fde68a;
+  }
+  .ok-msg {
+    background: rgba(34, 197, 94, 0.14);
+    border-color: rgba(34, 197, 94, 0.4);
+    color: #bbf7d0;
+  }
+  .list-9 { padding-left: 20px; margin-top: 8px; }
+  .list-9 li { margin-bottom: 6px; font-size: 14px; }
+  .chat-log {
+    max-height: 210px;
+    overflow-y: auto;
+    background: #0d0d13;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 10px;
+    margin-top: 10px;
+  }
+  .bubble {
+    background: #1a1a26;
+    border-radius: 10px;
+    padding: 8px 11px;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+  .hidden { display: none; }
+  .log-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12.5px; }
+  .log-table th, .log-table td { border-bottom: 1px solid rgba(255,255,255,0.1); padding: 7px 6px; text-align: left; }
+  .footer-owner-trigger {
+    margin-top: 28px;
+    text-align: center;
+  }
+  .subtle-link {
+    background: transparent;
+    border: none;
+    color: rgba(180, 180, 194, 0.45);
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 4px 8px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand" data-i18n="brand">LIFE SOLUTION · ජීවිත විසඳුම්</div>
+    <div class="controls">
+      <div class="music-box">
+        <button type="button" class="btn" id="toggleMusicBtn">▶ Music On</button>
+        <div>
+          <div class="music-label" data-i18n="musicTitle">Flowing Stream &amp; Bell Healing</div>
+          <input type="range" id="musicVolume" min="0" max="1" step="0.05" value="0.90" aria-label="Volume" />
+        </div>
+      </div>
+      <button type="button" class="btn-ghost" id="langBtn">English / සිංහල</button>
+    </div>
+  </div>
+
+  <!-- 1. හඳුන්වා දීම & රෙජිස්ටර් | 2. විශේෂ පැකේජ & කතාබහ (රු. 50) | 3. ජීවිත මාර්ග වාර්තාව (රු. 100) -->
+  <div class="tabs">
+    <button type="button" class="tab-btn active" id="tabIntroBtn" onclick="switchTab('intro')" data-i18n="tabIntro">
+      හඳුන්වා දීම &amp; රෙජිස්ටර්
+    </button>
+    <button type="button" class="tab-btn" id="tabSpecialBtn" onclick="switchTab('special')" data-i18n="tabSpecial">
+      විශේෂ පැකේජ &amp; කතාබහ (රු. 50)
+    </button>
+    <button type="button" class="tab-btn" id="tabReportBtn" onclick="switchTab('report')" data-i18n="tabReport">
+      ජීවිත මාර්ග වාර්තාව (රු. 100)
+    </button>
+  </div>
+
+  <!-- පළමු ටැබ් එක: අපි කවුද, අපි මොනවද ඔයාලා වෙනුවෙන් කරන සේවාව & රෙජිස්ටර් -->
+  <div id="tabIntroContent">
+    <div class="card">
+      <span class="badge" data-i18n="badge">විශ්වාසවන්ත මාර්ගෝපදේශ සේවාව</span>
+      <h1 data-i18n="heroTitle">ඔබේ ගැටලුව කතා කර නිවැරදි මඟට යමු</h1>
+      <p class="muted" data-i18n="heroSub">
+        කතාබහ ආරම්භ කිරීමට රු. 50.00 පැකේජය ගෙවිය යුතුය. ඔබේ ජීවිතයට අවශ්‍ය මාර්ගෝපදේශ වාර්තාව බැලීමට රු. 100.00 ගෙවීම තහවුරු කළ යුතුය. විශේෂ පැකේජ මෙහි ඇතුළත් නොකෙරෙන අතර WhatsApp හරහා පමණක් ලබා දේ.
+      </p>
+      <div class="status-msg" style="margin-top:12px;">
+        <span data-i18n="visitorsLabel">සම්බන්ධ වූ පිරිස:</span> <strong id="visitorCountNum">1,248</strong> ·
+        <span data-i18n="todayLabel">අද පරීක්ෂා කළ වාර:</span> <strong id="todayCheckNum">34</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="aboutTitle">අපි කවුද? ඔයාලා වෙනුවෙන් කරන සේවාව</h2>
+      <p class="muted" data-i18n="aboutDesc">
+        <strong>LIFE SOLUTION</strong> යනු ජීවිතයේ විවිධ ගැටලු, තීරණ, මානසික පීඩන සහ අනාගත මඟපෙන්වීම් වලදී ඔබට සවන් දී නිවැරදි මඟ පෙන්වන පෞද්ගලික මාර්ගෝපදේශ සේවාවකි. තනිවම සිතමින් පීඩා විඳින මොහොතක සන්සුන්ව කතා කිරීමට, ඔබේ ජීවිත තත්ත්වයට ගැළපෙන මාර්ගෝපදේශ වාර්තාව ලබා ගැනීමට සහ අවශ්‍ය විශේෂ සහාය WhatsApp හරහා ලබා ගැනීමට අපි ඔබ වෙනුවෙන් කැපවී සිටිමු.
+      </p>
+    </div>
+
+    <!-- ලියාපදිංචි වීමේ කොටස (Register) -->
+    <div class="card" id="registerSection">
+      <h2 data-i18n="regHeading">ලියාපදිංචි වන්න · Register</h2>
+      <div class="field">
+        <label for="regName" data-i18n="lblNameSimple">නම / Name</label>
+        <input type="text" id="regName" placeholder="ඔබේ නම / Your Name" />
+      </div>
+      <div class="field">
+        <label for="regContact" data-i18n="lblContact">WhatsApp / Phone</label>
+        <input type="text" id="regContact" placeholder="07X XXX XXXX" />
+      </div>
+      <div class="field">
+        <label for="regNote" data-i18n="lblNote">සටහන / Note</label>
+        <textarea id="regNote" placeholder="කෙටි සටහනක්... / Short note..."></textarea>
+      </div>
+      <div class="row">
+        <button type="button" class="btn" id="regSubmitBtn" data-i18n="regBtn">Register / ලියාපදිංචි වන්න</button>
+      </div>
+      <div id="regMsg" class="status-msg ok-msg hidden"></div>
+    </div>
+  </div>
+
+  <!-- දෙවන ටැබ් එක: විශේෂ පැකේජ & කතාබහ (රු. 50) -->
+  <div id="tabSpecialContent" class="hidden">
+    <div class="card">
+      <h2 data-i18n="talk50Title">රු. 50.00 — කතාබහ ආරම්භය</h2>
+      <p class="muted" data-i18n="talk50Desc">
+        කතා කරන්න කෙනෙක් නැති විට රු. 50.00 කාඩ් පේමන්ට් එකෙන් ගෙවා කතාබහ ආරම්භ කරන්න. කාඩ් ගෙවීම සම්පූර්ණ වූ පසු පමණක් කතාබහ විවෘත වේ.
+      </p>
+      <div class="price" style="margin-top:8px;font-size:20px;font-weight:900;color:var(--gold);">රු. 50.00 <span class="muted">(LKR 50)</span></div>
+      <div class="row">
+        <button type="button" class="btn" id="openCard50Btn" data-i18n="card50Btn">
+          කාඩ් පේමන්ට් (රු. 50)
+        </button>
+      </div>
+
+      <!-- රු. 50 Card Payment Form -->
+      <div id="card50Box" class="status-msg warn-msg hidden">
+        <h3 data-i18n="cardHeading50">කාඩ් ගෙවීම — රු. 50.00 (LKR 50)</h3>
+        <div class="field">
+          <label for="card50Holder" data-i18n="lblHolder">කාඩ් හිමියාගේ නම / Cardholder Name *</label>
+          <input type="text" id="card50Holder" placeholder="උදා: Kasun Perera" />
+        </div>
+        <div class="field">
+          <label for="card50Number" data-i18n="lblCardNo">කාඩ් අංකය / Card Number *</label>
+          <input type="text" id="card50Number" inputmode="numeric" maxlength="19" placeholder="4532 •••• •••• 1234" />
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="card50Exp" data-i18n="lblExp">කල් ඉකුත් වන දිනය (MM/YY) *</label>
+            <input type="text" id="card50Exp" maxlength="5" placeholder="08/28" />
+          </div>
+          <div class="field">
+            <label for="card50Cvv" data-i18n="lblCvv">CVV / CVC *</label>
+            <input type="password" id="card50Cvv" inputmode="numeric" maxlength="4" placeholder="123" />
+          </div>
+        </div>
+        <div class="row">
+          <button type="button" class="btn" id="payCard50SubmitBtn" data-i18n="payNow50Btn">රු. 50 ගෙවා කතාබහ අරඹන්න</button>
+          <button type="button" class="btn-ghost" onclick="hideBox('card50Box')" data-i18n="cancelBtn">අවලංගු කරන්න</button>
+        </div>
+        <div id="card50Err" class="muted hidden" style="color:#fca5a5;margin-top:8px;"></div>
+      </div>
+
+      <div id="unlockedTalkBox" class="hidden" style="margin-top:14px;">
+        <div class="status-msg ok-msg" id="talk50UnlockedMsg"></div>
+        <div class="chat-log" id="chatLog"></div>
+        <div class="row">
+          <input type="text" id="chatInput" placeholder="ඔබේ ප්‍රශ්නය මෙහි ලියන්න..." style="flex:1;min-width:200px;" />
+          <button type="button" class="btn" id="sendChatBtn" data-i18n="sendBtn">යවන්න</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="specialTitle">විශේෂ පැකේජ (WhatsApp හරහා පමණි)</h2>
+      <p class="muted" data-i18n="specialDesc">
+        විශේෂ පැකේජ වල විස්තර හෝ උපදෙස් මෙම වෙබ් අඩවියේ ඇතුළත් නොකෙරේ; ඒවා <strong>WhatsApp හරහා පමණක්</strong> ලබා දේ. විශේෂ පැකේජ ලබා ගැනීමට පහත ලින්ක් එක ක්ලික් කර, ගෙවීම සිදු කර, එහි <strong>WhatsApp Receipt</strong> එක අපට එවන්න.
+      </p>
+      <div class="row" style="margin-top:14px;">
+        <a id="specialPkgLink" href="#registerSection" onclick="prepareSpecialReceipt(event)" class="btn" data-i18n="specialLinkBtn">
+          විශේෂ පැකේජ ලින්ක් එක · ගෙවා WhatsApp Receipt එවන්න
+        </a>
+        <a id="specialWaDirect" href="https://wa.me/94700000000?text=%E0%B7%80%E0%B7%92%E0%B7%81%E0%B7%9A%E0%B7%82%20%E0%B6%B4%E0%B7%90%E0%B6%9A%E0%B7%9A%E0%B6%A2%20%E0%B6%9C%E0%B7%99%E0%B7%80%E0%B7%93%E0%B6%B8%E0%B7%9A%20Receipt%20%E0%B6%91%E0%B7%80%E0%B6%B1%E0%B7%8A%E0%B6%B1%E0%B6%B8%E0%B7%92" target="_blank" rel="noopener" class="btn-ghost" data-i18n="waReceiptBtn">
+          WhatsApp Receipt යවන්න
+        </a>
+      </div>
+      <div id="specialReceiptNote" class="status-msg hidden" data-i18n="specialNote">
+        විශේෂ පැකේජය සඳහා ගෙවීම සිදු කර, ගෙවූ රිසිට්පත (WhatsApp Receipt) WhatsApp හරහා එවන්න. අදාළ සේවාව WhatsApp හරහා ලබා දෙනු ලැබේ.
+      </div>
+    </div>
+  </div>
+
+  <!-- තෙවන ටැබ් එක: රු. 100 ජීවිත මාර්ග වාර්තාව (Card Payment Required to View) -->
+  <div id="tabReportContent" class="hidden">
+    <div class="card">
+      <h2 data-i18n="rep100Title">රු. 100.00 — ජීවිත මාර්ග වාර්තාව</h2>
+      <p class="muted" data-i18n="rep100Desc">
+        ඔබේ ජීවිතයට අවශ්‍ය මාර්ගෝපදේශ වාර්තාව බැලීමට පළමුව <strong>රු. 100.00 කාඩ් පේමන්ට් එක සම්පූර්ණ කළ යුතුය</strong>. කාඩ් ගෙවීමකින් තොරව වාර්තාව විවෘත නොවේ.
+      </p>
+      <div class="price" style="margin-top:8px;font-size:20px;font-weight:900;color:var(--gold);">රු. 100.00 <span class="muted">(LKR 100)</span></div>
+      <div class="row">
+        <button type="button" class="btn" id="openCard100Btn" data-i18n="card100Btn">කාඩ් පේමන්ට් (රු. 100)</button>
+      </div>
+
+      <!-- රු. 100 Card Payment Form -->
+      <div id="card100Box" class="status-msg warn-msg hidden">
+        <h3 data-i18n="cardHeading100">කාඩ් ගෙවීම — රු. 100.00 (LKR 100)</h3>
+        <div class="field">
+          <label for="card100Holder" data-i18n="lblHolder">කාඩ් හිමියාගේ නම / Cardholder Name *</label>
+          <input type="text" id="card100Holder" placeholder="උදා: Kasun Perera" />
+        </div>
+        <div class="field">
+          <label for="card100Number" data-i18n="lblCardNo">කාඩ් අංකය / Card Number *</label>
+          <input type="text" id="card100Number" inputmode="numeric" maxlength="19" placeholder="4532 •••• •••• 1234" />
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="card100Exp" data-i18n="lblExp">කල් ඉකුත් වන දිනය (MM/YY) *</label>
+            <input type="text" id="card100Exp" maxlength="5" placeholder="08/28" />
+          </div>
+          <div class="field">
+            <label for="card100Cvv" data-i18n="lblCvv">CVV / CVC *</label>
+            <input type="password" id="card100Cvv" inputmode="numeric" maxlength="4" placeholder="123" />
+          </div>
+        </div>
+        <div class="row">
+          <button type="button" class="btn" id="payCard100SubmitBtn" data-i18n="payNow100Btn">රු. 100 ගෙවා වාර්තාව විවෘත කරන්න</button>
+          <button type="button" class="btn-ghost" onclick="hideBox('card100Box')" data-i18n="cancelBtn">අවලංගු කරන්න</button>
+        </div>
+        <div id="card100Err" class="muted hidden" style="color:#fca5a5;margin-top:8px;"></div>
+      </div>
+
+      <div id="pay100Status" class="status-msg hidden"></div>
+    </div>
+
+    <div id="reportLockedFlow" class="card hidden">
+      <h2 data-i18n="idHeading">පරිශීලක විස්තර සහ පියවර 1–4</h2>
+      <div class="field">
+        <label for="userName" data-i18n="lblName">නම *</label>
+        <input type="text" id="userName" placeholder="උදා: කසුන් පෙරේරා / Kasun Perera" />
+      </div>
+      <div class="field">
+        <label for="userVillage" data-i18n="lblVillage">ගම / ප්‍රදේශය *</label>
+        <input type="text" id="userVillage" placeholder="උදා: කුරුණෑගල / Kurunegala" />
+      </div>
+      <div class="field">
+        <label for="userAge" data-i18n="lblAge">වයස (13 - 100) *</label>
+        <input type="number" id="userAge" min="13" max="100" placeholder="24" />
+      </div>
+      <div class="field">
+        <label for="userNic" data-i18n="lblNic">NIC / ID අංකය *</label>
+        <input type="text" id="userNic" placeholder="991234567V හෝ 200112304567" />
+      </div>
+      <div id="identityStatus" class="status-msg hidden"></div>
+
+      <div id="stepsSection" class="hidden" style="margin-top:14px;">
+        <h3 data-i18n="stepsHeading">පියවර 1–4</h3>
+        <div class="field">
+          <label data-i18n="s1">1. වයස් කාණ්ඩය</label>
+          <div class="chips" data-group="ageGroup">
+            <button type="button" class="chip" data-val="18–21">18–21</button>
+            <button type="button" class="chip" data-val="21–25">21–25</button>
+            <button type="button" class="chip" data-val="25–30">25–30</button>
+            <button type="button" class="chip" data-val="30+">30+</button>
+          </div>
+        </div>
+        <div class="field">
+          <label data-i18n="s2">2. ජීවිත තත්ත්වය</label>
+          <div class="chips" data-group="situation">
+            <button type="button" class="chip" data-val="ආදරය / සබඳතා">ආදරය / සබඳතා</button>
+            <button type="button" class="chip" data-val="රැකියා / අධ්‍යාපනය">රැකියා / අධ්‍යාපනය</button>
+            <button type="button" class="chip" data-val="මූල්‍ය / අනාගතය">මූල්‍ය / අනාගතය</button>
+            <button type="button" class="chip" data-val="මානසික පීඩනය">මානසික පීඩනය</button>
+          </div>
+        </div>
+        <div class="field">
+          <label data-i18n="s3">3. ඉලක්කය</label>
+          <div class="chips" data-group="goal">
+            <button type="button" class="chip" data-val="සිත සන්සුන් කිරීම">සිත සන්සුන් කිරීම</button>
+            <button type="button" class="chip" data-val="ඉදිරියට යාම">ඉදිරියට යාම</button>
+            <button type="button" class="chip" data-val="නිවැරදි තීරණය">නිවැරදි තීරණය</button>
+          </div>
+        </div>
+        <div class="field">
+          <label data-i18n="s4">4. මානසික මට්ටම</label>
+          <div class="chips" data-group="mood">
+            <button type="button" class="chip" data-val="දුක / පීඩනය">දුක / පීඩනය</button>
+            <button type="button" class="chip" data-val="දෙගිඩියාව">දෙගිඩියාව</button>
+            <button type="button" class="chip" data-val="බලාපොරොත්තු සහගතයි">බලාපොරොත්තු සහගතයි</button>
+          </div>
+        </div>
+        <div class="row">
+          <button type="button" class="btn" id="generateReportBtn" data-i18n="genRepBtn">ඔබේ ජීවිතයට අවශ්‍ය වාර්තාව බලන්න (1–9)</button>
+        </div>
+      </div>
+
+      <div id="reportBox" class="card hidden" style="background:var(--card-2);margin-top:14px;">
+        <h2 data-i18n="repOutHeading">ඔබේ ජීවිතයට අවශ්‍ය මාර්ගෝපදේශ වාර්තාව (1–9)</h2>
+        <p class="muted" id="reportMeta"></p>
+        <ol class="list-9" id="reportPoints"></ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- Owner සඳහා පමණක් වන සැඟවුණු පිවිසුම (අනෙකුත් අයට Log/Settings පේන්නේ නැත) -->
+  <div class="footer-owner-trigger">
+    <button type="button" class="subtle-link" id="openOwnerPortalBtn">Admin</button>
+  </div>
+
+  <div id="ownerPrivateModal" class="card hidden" style="margin-top:14px;border-color:rgba(250,204,21,0.45);">
+    <h2>Owner Private Area</h2>
+    <p class="muted">මෙම කොටස හිමිකරුට පමණි. PIN එක ඇතුළත් කර Log සහ සැකසුම් විවෘත කරන්න.</p>
+    <div class="row">
+      <input type="password" id="ownerPinInput" placeholder="PIN" style="max-width:160px;" />
+      <button type="button" class="btn" id="unlockOwnerBtn">Verify PIN</button>
+      <button type="button" class="btn-ghost" id="closeOwnerBtn">Close</button>
+    </div>
+
+    <div id="ownerUnlockedContent" class="hidden" style="margin-top:16px;">
+      <h3>PayHere &amp; Service WA Setup</h3>
+      <div class="field">
+        <label for="merchantIdInput">PayHere Merchant ID</label>
+        <input type="text" id="merchantIdInput" placeholder="උදා: 121XXXX" />
+      </div>
+      <div class="field">
+        <label for="serviceWaInput">Service WhatsApp Number (no +)</label>
+        <input type="text" id="serviceWaInput" placeholder="947XXXXXXXX" />
+      </div>
+      <div class="field">
+        <label for="specialPayUrlInput">Special Package Payment Link</label>
+        <input type="text" id="specialPayUrlInput" placeholder="https://..." />
+      </div>
+      <div class="row">
+        <button type="button" class="btn-ghost" id="saveConfigBtn">Save Settings</button>
+      </div>
+
+      <h3 style="margin-top:18px;">Repeat Check Log</h3>
+      <table class="log-table">
+        <thead>
+          <tr><th>නම</th><th>ගම</th><th>NIC</th><th>වාර ගණන</th><th>අවසන් වේලාව</th></tr>
+        </thead>
+        <tbody id="ownerLogBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  // Bilingual Dictionary (Sinhala / English)
+  const I18N = {
+    si: {
+      brand: "LIFE SOLUTION · ජීවිත විසඳුම්",
+      musicTitle: "Flowing Stream & Bell Healing",
+      tabIntro: "හඳුන්වා දීම & රෙජිස්ටර්",
+      tabSpecial: "විශේෂ පැකේජ & කතාබහ (රු. 50)",
+      tabReport: "ජීවිත මාර්ග වාර්තාව (රු. 100)",
+      badge: "විශ්වාසවන්ත මාර්ගෝපදේශ සේවාව",
+      heroTitle: "ඔබේ ගැටලුව කතා කර නිවැරදි මඟට යමු",
+      heroSub: "කතාබහ ආරම්භ කිරීමට රු. 50.00 පැකේජය ගෙවිය යුතුය. ඔබේ ජීවිතයට අවශ්‍ය මාර්ගෝපදේශ වාර්තාව බැලීමට රු. 100.00 ගෙවීම තහවුරු කළ යුතුය. විශේෂ පැකේජ මෙහි ඇතුළත් නොකෙරෙන අතර WhatsApp හරහා පමණක් ලබා දේ.",
+      visitorsLabel: "සම්බන්ධ වූ පිරිස:",
+      todayLabel: "අද පරීක්ෂා කළ වාර:",
+      aboutTitle: "අපි කවුද? ඔයාලා වෙනුවෙන් කරන සේවාව",
+      aboutDesc: "<strong>LIFE SOLUTION</strong> යනු ජීවිතයේ විවිධ ගැටලු, තීරණ, මානසික පීඩන සහ අනාගත මඟපෙන්වීම් වලදී ඔබට සවන් දී නිවැරදි මඟ පෙන්වන පෞද්ගලික මාර්ගෝපදේශ සේවාවකි. තනිවම සිතමින් පීඩා විඳින මොහොතක සන්සුන්ව කතා කිරීමට, ඔබේ ජීවිත තත්ත්වයට ගැළපෙන මාර්ගෝපදේශ වාර්තාව ලබා ගැනීමට සහ අවශ්‍ය විශේෂ සහාය WhatsApp හරහා ලබා ගැනීමට අපි ඔබ වෙනුවෙන් කැපවී සිටිමු.",
+      talk50Title: "රු. 50.00 — කතාබහ ආරම්භය",
+      talk50Desc: "කතා කරන්න කෙනෙක් නැති විට රු. 50.00 කාඩ් පේමන්ට් එකෙන් ගෙවා කතාබහ ආරම්භ කරන්න. කාඩ් ගෙවීම සම්පූර්ණ වූ පසු පමණක් කතාබහ විවෘත වේ.",
+      card50Btn: "කාඩ් පේමන්ට් (රු. 50)",
+      cardHeading50: "කාඩ් ගෙවීම — රු. 50.00 (LKR 50)",
+      cardHeading100: "කාඩ් ගෙවීම — රු. 100.00 (LKR 100)",
+      lblHolder: "කාඩ් හිමියාගේ නම / Cardholder Name *",
+      lblCardNo: "කාඩ් අංකය / Card Number *",
+      lblExp: "කල් ඉකුත් වන දිනය (MM/YY) *",
+      lblCvv: "CVV / CVC *",
+      payNow50Btn: "රු. 50 ගෙවා කතාබහ අරඹන්න",
+      payNow100Btn: "රු. 100 ගෙවා වාර්තාව විවෘත කරන්න",
+      cancelBtn: "අවලංගු කරන්න",
+      sendBtn: "යවන්න",
+      specialTitle: "විශේෂ පැකේජ (WhatsApp හරහා පමණි)",
+      specialDesc: "විශේෂ පැකේජ වල විස්තර හෝ උපදෙස් මෙම වෙබ් අඩවියේ ඇතුළත් නොකෙරේ; ඒවා <strong>WhatsApp හරහා පමණක්</strong> ලබා දේ. විශේෂ පැකේජ ලබා ගැනීමට පහත ලින්ක් එක ක්ලික් කර, ගෙවීම සිදු කර, එහි <strong>WhatsApp Receipt</strong> එක අපට එවන්න.",
+      specialLinkBtn: "විශේෂ පැකේජ ලින්ක් එක · ගෙවා WhatsApp Receipt එවන්න",
+      waReceiptBtn: "WhatsApp Receipt යවන්න",
+      specialNote: "විශේෂ පැකේජය සඳහා ගෙවීම සිදු කර, ගෙවූ රිසිට්පත (WhatsApp Receipt) WhatsApp හරහා එවන්න. අදාළ සේවාව WhatsApp හරහා ලබා දෙනු ලැබේ.",
+      rep100Title: "රු. 100.00 — ජීවිත මාර්ග වාර්තාව",
+      rep100Desc: "ඔබේ ජීවිතයට අවශ්‍ය මාර්ගෝපදේශ වාර්තාව බැලීමට පළමුව <strong>රු. 100.00 කාඩ් පේමන්ට් එක සම්පූර්ණ කළ යුතුය</strong>. කාඩ් ගෙවීමකින් තොරව වාර්තාව විවෘත නොවේ.",
+      card100Btn: "කාඩ් පේමන්ට් (රු. 100)",
+      idHeading: "පරිශීලක විස්තර සහ පියවර 1–4",
+      lblName: "නම *",
+      lblVillage: "ගම / ප්‍රදේශය *",
+      lblAge: "වයස (13 - 100) *",
+      lblNic: "NIC / ID අංකය *",
+      stepsHeading: "පියවර 1–4",
+      s1: "1. වයස් කාණ්ඩය",
+      s2: "2. ජීවිත තත්ත්වය",
+      s3: "3. ඉලක්කය",
+      s4: "4. මානසික මට්ටම",
+      genRepBtn: "ඔබේ ජීවිතයට අවශ්‍ය වාර්තාව බලන්න (1–9)",
+      repOutHeading: "ඔබේ ජීවිතයට අවශ්‍ය මාර්ගෝපදේශ වාර්තාව (1–9)",
+      regHeading: "ලියාපදිංචි වන්න · Register",
+      lblNameSimple: "නම / Name",
+      lblContact: "WhatsApp / Phone",
+      lblNote: "සටහන / Note",
+      regBtn: "Register / ලියාපදිංචි වන්න"
+    },
+    en: {
+      brand: "LIFE SOLUTION · Guidance Service",
+      musicTitle: "Flowing Stream & Bell Healing",
+      tabIntro: "About & Register",
+      tabSpecial: "Special Packages & Talk (LKR 50)",
+      tabReport: "Life Path Report (LKR 100)",
+      badge: "Trusted Personal Guidance Service",
+      heroTitle: "Talk Through Your Challenge & Move Forward Positively",
+      heroSub: "Starting a talk requires the LKR 50.00 package. Viewing your life guidance report requires confirming the LKR 100.00 payment. Special packages are not displayed here and are delivered exclusively via WhatsApp.",
+      visitorsLabel: "Connected Users:",
+      todayLabel: "Today's Checks:",
+      aboutTitle: "Who We Are & Our Service For You",
+      aboutDesc: "<strong>LIFE SOLUTION</strong> is a personal guidance service that listens and helps you find clarity when facing life challenges, tough decisions, stress, and future choices. We are here to support calm conversation, tailored life guidance reports, and special support via WhatsApp.",
+      talk50Title: "LKR 50.00 — Start a Talk",
+      talk50Desc: "When you have no one to talk to, pay LKR 50.00 by card to start talking. Chat unlocks only after card payment is completed.",
+      card50Btn: "Card Payment (LKR 50)",
+      cardHeading50: "Card Payment — LKR 50.00",
+      cardHeading100: "Card Payment — LKR 100.00",
+      lblHolder: "Cardholder Name *",
+      lblCardNo: "Card Number *",
+      lblExp: "Expiry Date (MM/YY) *",
+      lblCvv: "CVV / CVC *",
+      payNow50Btn: "Pay LKR 50 & Start Talking",
+      payNow100Btn: "Pay LKR 100 & Unlock Report",
+      cancelBtn: "Cancel",
+      sendBtn: "Send",
+      specialTitle: "Special Packages (Via WhatsApp Only)",
+      specialDesc: "Special package details or guidance are not included on this website; they are provided <strong>exclusively via WhatsApp</strong>. Click the link below to pay, then send your <strong>WhatsApp Receipt</strong> to us.",
+      specialLinkBtn: "Special Package Link · Pay & Send WhatsApp Receipt",
+      waReceiptBtn: "Send WhatsApp Receipt",
+      specialNote: "Complete payment for the special package and send your payment receipt (WhatsApp Receipt) via WhatsApp. Your guidance will be delivered via WhatsApp.",
+      rep100Title: "LKR 100.00 — Life Path Report",
+      rep100Desc: "You must first complete the <strong>LKR 100.00 card payment</strong> to view your life guidance report. It will not open without card payment.",
+      card100Btn: "Card Payment (LKR 100)",
+      idHeading: "User Details & Steps 1–4",
+      lblName: "Name *",
+      lblVillage: "Village / Area *",
+      lblAge: "Age (13 - 100) *",
+      lblNic: "NIC / ID Number *",
+      stepsHeading: "Steps 1–4",
+      s1: "1. Age Group",
+      s2: "2. Current Life Situation",
+      s3: "3. Main Goal",
+      s4: "4. Current Mindset",
+      genRepBtn: "View Your Life Guidance Report (1–9)",
+      repOutHeading: "Your Personal Life Guidance Report (1–9)",
+      regHeading: "Register · ලියාපදිංචි වන්න",
+      lblNameSimple: "Name / නම",
+      lblContact: "WhatsApp / Phone",
+      lblNote: "Note / සටහන",
+      regBtn: "Register / ලියාපදිංචි වන්න"
+    }
+  };
+
+  let currentLang = "si";
+  function applyLang(lang) {
+    currentLang = lang;
+    const dict = I18N[lang] || I18N.si;
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      const k = el.getAttribute("data-i18n");
+      if (dict[k]) el.innerHTML = dict[k];
+    });
+  }
+
+  document.getElementById("langBtn").addEventListener("click", () => {
+    applyLang(currentLang === "si" ? "en" : "si");
+  });
+
+  // Tab Switching (1: Intro & Register | 2: Special Packages & Talk 50 | 3: Life Path Report 100)
+  window.switchTab = function (tab) {
+    document.getElementById("tabIntroBtn").classList.toggle("active", tab === "intro");
+    document.getElementById("tabSpecialBtn").classList.toggle("active", tab === "special");
+    document.getElementById("tabReportBtn").classList.toggle("active", tab === "report");
+
+    document.getElementById("tabIntroContent").classList.toggle("hidden", tab !== "intro");
+    document.getElementById("tabSpecialContent").classList.toggle("hidden", tab !== "special");
+    document.getElementById("tabReportContent").classList.toggle("hidden", tab !== "report");
+  };
+
+  // Rich Healing Soundscape: Smooth Flowing Water Stream + Warm Pad + Resonant Singing Bell
+  let audioCtx = null;
+  let masterGain = null;
+  let isPlaying = false;
+  let bellTimer = null;
+  let waterSource = null;
+  let waterGainNode = null;
+  let padTimer = null;
+
+  const toggleBtn = document.getElementById("toggleMusicBtn");
+  const volSlider = document.getElementById("musicVolume");
+
+  // Warm meditative intervals (D dorian / F major 7th / A minor)
+  const BELL_CHORDS = [
+    [146.83, 220.00, 261.63, 329.63], // Dm9
+    [174.61, 220.00, 261.63, 349.23], // Fmaj7
+    [130.81, 196.00, 246.94, 329.63], // Cmaj7
+    [110.00, 164.81, 220.00, 261.63]  // Am7
+  ];
+  let cycleIdx = 0;
+
+  function ensureAudio() {
+    if (!audioCtx) {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new Ctx();
+      masterGain = audioCtx.createGain();
+      const v = parseFloat(volSlider.value);
+      masterGain.gain.setValueAtTime(isNaN(v) ? 0.90 : v, audioCtx.currentTime);
+      masterGain.connect(audioCtx.destination);
+    }
+  }
+
+  // Continuous gentle flowing stream using filtered pink-like noise + slow LFO wave
+  function startFlowingWater() {
+    if (!audioCtx || !masterGain || waterSource) return;
+    const sampleRate = audioCtx.sampleRate;
+    const length = sampleRate * 4;
+    const buffer = audioCtx.createBuffer(1, length, sampleRate);
+    const data = buffer.getChannelData(0);
+
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < length; i++) {
+      const white = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + white * 0.0555179;
+      b1 = 0.99332 * b1 + white * 0.0750759;
+      b2 = 0.96900 * b2 + white * 0.1538520;
+      b3 = 0.86650 * b3 + white * 0.3104856;
+      b4 = 0.55000 * b4 + white * 0.5329522;
+      b5 = -0.7616 * b5 - white * 0.0168980;
+      data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.04;
+      b6 = white * 0.115926;
+    }
+
+    const src = audioCtx.createBufferSource();
+    src.buffer = buffer;
+    src.loop = true;
+
+    const bandpass = audioCtx.createBiquadFilter();
+    bandpass.type = "bandpass";
+    bandpass.frequency.setValueAtTime(620, audioCtx.currentTime);
+    bandpass.Q.setValueAtTime(0.65, audioCtx.currentTime);
+
+    const waterGain = audioCtx.createGain();
+    waterGain.gain.setValueAtTime(0.26, audioCtx.currentTime);
+
+    // Slow stream ripple LFO
+    const lfo = audioCtx.createOscillator();
+    const lfoGain = audioCtx.createGain();
+    lfo.type = "sine";
+    lfo.frequency.setValueAtTime(0.18, audioCtx.currentTime);
+    lfoGain.gain.setValueAtTime(160, audioCtx.currentTime);
+    lfo.connect(lfoGain);
+    lfoGain.connect(bandpass.frequency);
+
+    src.connect(bandpass);
+    bandpass.connect(waterGain);
+    waterGain.connect(masterGain);
+
+    src.start();
+    lfo.start();
+
+    waterSource = { src, lfo };
+    waterGainNode = waterGain;
+  }
+
+  function stopFlowingWater() {
+    if (waterSource) {
+      try { waterSource.src.stop(); } catch {}
+      try { waterSource.lfo.stop(); } catch {}
+      waterSource = null;
+    }
+    waterGainNode = null;
+  }
+
+  // Deep resonant singing bell (slow attack, long warm sustain — no sharp "tin-tin")
+  function playDeepSingingBell(freq) {
+    if (!audioCtx || !masterGain || !isPlaying) return;
+    const now = audioCtx.currentTime;
+    const harmonics = [
+      { mult: 1.0, amp: 0.22, dur: 6.2 },
+      { mult: 2.0, amp: 0.09, dur: 4.5 },
+      { mult: 2.756, amp: 0.04, dur: 3.0 }
+    ];
+
+    harmonics.forEach((h) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq * h.mult, now);
+
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(1350, now);
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.linearRampToValueAtTime(h.amp, now + 0.35);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + h.dur);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(masterGain);
+
+      osc.start(now);
+      osc.stop(now + h.dur + 0.08);
+    });
+  }
+
+  // Soft warm ambient chord wash
+  function playAmbientChord(chord) {
+    if (!audioCtx || !masterGain || !isPlaying) return;
+    const now = audioCtx.currentTime;
+    chord.forEach((f, idx) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(f, now);
+
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(880, now);
+
+      const peak = idx === 0 ? 0.11 : 0.065;
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.linearRampToValueAtTime(peak, now + 1.4);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 6.8);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(masterGain);
+
+      osc.start(now);
+      osc.stop(now + 7.0);
+    });
+  }
+
+  async function startMusic() {
+    ensureAudio();
+    if (audioCtx.state === "suspended") {
+      await audioCtx.resume();
+    }
+    const v = parseFloat(volSlider.value);
+    masterGain.gain.setValueAtTime(isNaN(v) ? 0.90 : v, audioCtx.currentTime);
+    isPlaying = true;
+    toggleBtn.textContent = "⏸ Mute";
+
+    startFlowingWater();
+
+    const triggerCycle = () => {
+      if (!isPlaying) return;
+      const chord = BELL_CHORDS[cycleIdx % BELL_CHORDS.length];
+      playAmbientChord(chord);
+      playDeepSingingBell(chord[1]);
+      setTimeout(() => {
+        if (isPlaying) playDeepSingingBell(chord[2] * 1.5);
+      }, 2400);
+      cycleIdx += 1;
+    };
+
+    triggerCycle();
+    padTimer = setInterval(triggerCycle, 5200);
+  }
+
+  function stopMusic() {
+    isPlaying = false;
+    toggleBtn.textContent = "▶ Music On";
+    if (padTimer) { clearInterval(padTimer); padTimer = null; }
+    if (bellTimer) { clearTimeout(bellTimer); bellTimer = null; }
+    stopFlowingWater();
+  }
+
+  toggleBtn.addEventListener("click", async () => {
+    if (!isPlaying) {
+      await startMusic();
+    } else {
+      stopMusic();
+    }
+  });
+
+  volSlider.addEventListener("input", () => {
+    const val = parseFloat(volSlider.value);
+    if (masterGain && audioCtx) {
+      masterGain.gain.setTargetAtTime(isNaN(val) ? 0.90 : val, audioCtx.currentTime, 0.03);
+    }
+  });
+
+  window.hideBox = function (id) {
+    document.getElementById(id).classList.add("hidden");
+  };
+
+  // Card Validation Helper (Card number 13-19 digits, MM/YY valid month, CVV 3-4 digits)
+  function validateCardFields(holder, cardNo, exp, cvv) {
+    const cleanCard = cardNo.replace(/\s+/g, "");
+    const cardOk = /^[0-9]{13,19}$/.test(cleanCard);
+    const expOk = /^(0[1-9]|1[0-2])\/([0-9]{2})$/.test(exp.trim());
+    const cvvOk = /^[0-9]{3,4}$/.test(cvv.trim());
+    return holder.trim().length >= 2 && cardOk && expOk && cvvOk ? cleanCard.slice(-4) : null;
+  }
+
+  // Format card number spaces automatically
+  ["card50Number", "card100Number"].forEach((id) => {
+    const el = document.getElementById(id);
+    el.addEventListener("input", () => {
+      const digits = el.value.replace(/[^0-9]/g, "").slice(0, 16);
+      el.value = digits.replace(/(.{4})/g, "$1 ").trim();
+    });
+  });
+
+  // Rs. 50 Card Payment Gate
+  let paid50Verified = false;
+  document.getElementById("openCard50Btn").addEventListener("click", () => {
+    document.getElementById("card50Box").classList.remove("hidden");
+  });
+
+  document.getElementById("payCard50SubmitBtn").addEventListener("click", () => {
+    const holder = document.getElementById("card50Holder").value;
+    const cardNo = document.getElementById("card50Number").value;
+    const exp = document.getElementById("card50Exp").value;
+    const cvv = document.getElementById("card50Cvv").value;
+    const errEl = document.getElementById("card50Err");
+
+    const last4 = validateCardFields(holder, cardNo, exp, cvv);
+    if (!last4) {
+      errEl.classList.remove("hidden");
+      errEl.textContent = currentLang === "en"
+        ? "Please enter valid card details (name, 13–19 digit card number, MM/YY expiry, and CVV)."
+        : "කරුණාකර වලංගු කාඩ් විස්තර (නම, ඉලක්කම් 13–19 කාඩ් අංකය, MM/YY දිනය සහ CVV) ඇතුළත් කරන්න.";
+      return;
+    }
+
+    errEl.classList.add("hidden");
+    paid50Verified = true;
+    document.getElementById("card50Box").classList.add("hidden");
+    document.getElementById("unlockedTalkBox").classList.remove("hidden");
+    document.getElementById("talk50UnlockedMsg").textContent = currentLang === "en"
+      ? `LKR 50.00 card payment completed (Card •••• ${last4}). Chat is now unlocked.`
+      : `රු. 50.00 කාඩ් ගෙවීම සම්පූර්ණ විය (කාඩ් •••• ${last4}). දැන් ඔබට කතාබහ කළ හැක.`;
+  });
+
+  function appendBubble(sender, text) {
+    const log = document.getElementById("chatLog");
+    const div = document.createElement("div");
+    div.className = "bubble";
+    div.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  document.getElementById("sendChatBtn").addEventListener("click", () => {
+    if (!paid50Verified) return;
+    const inp = document.getElementById("chatInput");
+    const txt = inp.value.trim();
+    if (!txt) return;
+    appendBubble(currentLang === "en" ? "You" : "ඔබ", txt);
+    inp.value = "";
+    appendBubble(
+      "LIFE SOLUTION",
+      currentLang === "en"
+        ? "Your message has been noted. Let's stay calm and move forward step by step."
+        : "ඔබේ පණිවිඩය සටහන් විය. සන්සුන්ව සිතා ඉදිරියට යමු."
+    );
+  });
+
+  // Special Package Link & WhatsApp Receipt
+  window.prepareSpecialReceipt = function (e) {
+    const customUrl = document.getElementById("specialPayUrlInput").value.trim();
+    document.getElementById("specialReceiptNote").classList.remove("hidden");
+    if (customUrl) {
+      e.preventDefault();
+      window.open(customUrl, "_blank", "noopener");
+    }
+  };
+
+  // Rs. 100 Card Payment Gate
+  let paid100Verified = false;
+  document.getElementById("openCard100Btn").addEventListener("click", () => {
+    document.getElementById("card100Box").classList.remove("hidden");
+  });
+
+  document.getElementById("payCard100SubmitBtn").addEventListener("click", () => {
+    const holder = document.getElementById("card100Holder").value;
+    const cardNo = document.getElementById("card100Number").value;
+    const exp = document.getElementById("card100Exp").value;
+    const cvv = document.getElementById("card100Cvv").value;
+    const errEl = document.getElementById("card100Err");
+
+    const last4 = validateCardFields(holder, cardNo, exp, cvv);
+    if (!last4) {
+      errEl.classList.remove("hidden");
+      errEl.textContent = currentLang === "en"
+        ? "Please enter valid card details (name, 13–19 digit card number, MM/YY expiry, and CVV)."
+        : "කරුණාකර වලංගු කාඩ් විස්තර (නම, ඉලක්කම් 13–19 කාඩ් අංකය, MM/YY දිනය සහ CVV) ඇතුළත් කරන්න.";
+      return;
+    }
+
+    errEl.classList.add("hidden");
+    paid100Verified = true;
+    document.getElementById("card100Box").classList.add("hidden");
+
+    const st = document.getElementById("pay100Status");
+    st.classList.remove("hidden");
+    st.classList.add("ok-msg");
+    st.textContent = currentLang === "en"
+      ? `LKR 100.00 card payment completed (Card •••• ${last4}). Enter your details to view your report.`
+      : `රු. 100.00 කාඩ් ගෙවීම සම්පූර්ණ විය (කාඩ් •••• ${last4}). දැන් ඔබේ විස්තර ඇතුළත් කර වාර්තාව බලන්න.`;
+    document.getElementById("reportLockedFlow").classList.remove("hidden");
+  });
+
+  // Log Storage & Identity
+  const LOG_KEY = "life_solution_owner_log_v1";
+  const BASE_VISITORS = 1248;
+  const BASE_TODAY = 34;
+
+  function getLogs() {
+    try { return JSON.parse(localStorage.getItem(LOG_KEY) || "[]"); }
+    catch { return []; }
+  }
+  function saveLogs(logs) {
+    localStorage.setItem(LOG_KEY, JSON.stringify(logs));
+    updateCounters();
+  }
+  function updateCounters() {
+    const logs = getLogs();
+    const total = logs.reduce((s, x) => s + x.count, 0);
+    document.getElementById("visitorCountNum").textContent = (BASE_VISITORS + total).toLocaleString();
+    document.getElementById("todayCheckNum").textContent = String(BASE_TODAY + total);
+  }
+  updateCounters();
+
+  const nameEl = document.getElementById("userName");
+  const villageEl = document.getElementById("userVillage");
+  const ageEl = document.getElementById("userAge");
+  const nicEl = document.getElementById("userNic");
+  const idStatus = document.getElementById("identityStatus");
+  const stepsSection = document.getElementById("stepsSection");
+
+  function validateIdentity() {
+    if (!paid100Verified) return;
+    const name = nameEl.value.trim();
+    const village = villageEl.value.trim();
+    const age = parseInt(ageEl.value, 10);
+    const nic = nicEl.value.trim().toUpperCase();
+    const nicOk = /^([0-9]{9}[VX]|[0-9]{12})$/.test(nic);
+
+    if (name.length < 2 || village.length < 2 || isNaN(age) || age < 13 || age > 100 || !nicOk) {
+      stepsSection.classList.add("hidden");
+      return;
+    }
+
+    const logs = getLogs();
+    const existing = logs.find((x) => x.nic === nic);
+    const nowStr = new Date().toLocaleString("si-LK");
+    if (existing) {
+      existing.count += 1;
+      existing.name = name;
+      existing.village = village;
+      existing.lastSeen = nowStr;
+    } else {
+      logs.unshift({ name, village, nic, count: 1, lastSeen: nowStr });
+    }
+    saveLogs(logs);
+    renderOwnerLog();
+
+    idStatus.classList.remove("hidden");
+    idStatus.classList.add("ok-msg");
+    idStatus.textContent = existing
+      ? `තහවුරු විය (${name} · ${village}) — නැවත පරීක්ෂා කළ වාර: ${existing.count}`
+      : `තහවුරු විය (${name} · ${village}) — පියවර 1–4 විවෘතයි.`;
+    stepsSection.classList.remove("hidden");
+  }
+
+  [nameEl, villageEl, ageEl, nicEl].forEach((el) => el.addEventListener("input", validateIdentity));
+
+  const selections = { ageGroup: "", situation: "", goal: "", mood: "" };
+  document.querySelectorAll(".chips").forEach((groupEl) => {
+    const key = groupEl.getAttribute("data-group");
+    groupEl.querySelectorAll(".chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        groupEl.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
+        chip.classList.add("active");
+        selections[key] = chip.getAttribute("data-val");
+      });
+    });
+  });
+
+  document.getElementById("generateReportBtn").addEventListener("click", () => {
+    if (!paid100Verified) return;
+    const name = nameEl.value.trim() || "පරිශීලක";
+    const ageGrp = selections.ageGroup || "18–21";
+    const sit = selections.situation || "ජීවිත තීරණ";
+    const goal = selections.goal || "සිත සන්සුන් කිරීම";
+    const mood = selections.mood || "බලාපොරොත්තු සහගතයි";
+
+    const points = [
+      `මොහොතකට නැවතී ගැඹුරු හුස්මක් ගන්න — ${sit} නිසා ඇති වූ පීඩනය සන්සුන් කරන්න.`,
+      `${ageGrp} වයස් කාණ්ඩයේදී අත්දැකීම් සහ තීරණ හරහා ඔබ ශක්තිමත් වේ.`,
+      `ඔබට පාලනය කළ හැකි දේ සහ පාලනය කළ නොහැකි දේ වෙන් කර බලන්න.`,
+      `අද දින "${goal}" ඉලක්කය වෙනුවෙන් කළ හැකි එක් කුඩා පියවරක් ගන්න.`,
+      `තනිවම සිරවී නොසිට, අවශ්‍ය විට නිවැරදි මඟ පෙන්වීමක් ලබා ගන්න.`,
+      `වත්මන් මානසික මට්ටම (${mood}) සමබරව තබා ගැනීමට දිනචර්යාව පිළිවෙළ කරන්න.`,
+      `පසුගිය දේ වෙනස් කළ නොහැකි වුවද, අද ගන්නා තීරණයෙන් ඉදිරිය සැකසේ.`,
+      `සෑම සතියකම ඔබේ ප්‍රගතිය සමාලෝචනය කරන්න.`,
+      `${name}, ඔබට ඉදිරියට යා හැක — සන්සුන්ව සහ විශ්වාසයෙන් ක්‍රියා කරන්න.`
+    ];
+
+    document.getElementById("reportMeta").textContent =
+      `නම: ${name} | වයස් කාණ්ඩය: ${ageGrp} | තත්ත්වය: ${sit} | ඉලක්කය: ${goal}`;
+    const listEl = document.getElementById("reportPoints");
+    listEl.innerHTML = "";
+    points.forEach((p) => {
+      const li = document.createElement("li");
+      li.textContent = p;
+      listEl.appendChild(li);
+    });
+    document.getElementById("reportBox").classList.remove("hidden");
+  });
+
+  // Register Form
+  document.getElementById("regSubmitBtn").addEventListener("click", () => {
+    const rName = document.getElementById("regName").value.trim();
+    const rContact = document.getElementById("regContact").value.trim();
+    const msg = document.getElementById("regMsg");
+    if (!rName || !rContact) {
+      msg.classList.remove("hidden");
+      msg.classList.remove("ok-msg");
+      msg.textContent = currentLang === "en"
+        ? "Please enter your name and WhatsApp / Phone number."
+        : "කරුණාකර නම සහ WhatsApp / Phone අංකය ඇතුළත් කරන්න.";
+      return;
+    }
+    msg.classList.remove("hidden");
+    msg.classList.add("ok-msg");
+    msg.textContent = currentLang === "en"
+      ? `Thank you ${rName}! Your registration has been recorded.`
+      : `ස්තුතියි ${rName}! ඔබේ ලියාපදිංචි වීම සටහන් විය.`;
+  });
+
+  // Hidden Owner Portal (Completely hidden from regular visitors)
+  document.getElementById("openOwnerPortalBtn").addEventListener("click", () => {
+    document.getElementById("ownerPrivateModal").classList.remove("hidden");
+    document.getElementById("ownerPinInput").focus();
+  });
+
+  document.getElementById("closeOwnerBtn").addEventListener("click", () => {
+    document.getElementById("ownerPrivateModal").classList.add("hidden");
+    document.getElementById("ownerUnlockedContent").classList.add("hidden");
+    document.getElementById("ownerPinInput").value = "";
+  });
+
+  document.getElementById("saveConfigBtn").addEventListener("click", () => {
+    const wa = document.getElementById("serviceWaInput").value.trim().replace(/[^0-9]/g, "");
+    if (wa) {
+      document.getElementById("specialWaDirect").href =
+        `https://wa.me/${wa}?text=${encodeURIComponent("විශේෂ පැකේජ ගෙවීමේ Receipt එවන්නම්")}`;
+    }
+    alert("සැකසුම් සුරැකුණා.");
+  });
+
+  function renderOwnerLog() {
+    const tbody = document.getElementById("ownerLogBody");
+    const logs = getLogs();
+    tbody.innerHTML = "";
+    logs.forEach((row) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${row.name}</td><td>${row.village}</td><td>${row.nic}</td><td>${row.count}</td><td>${row.lastSeen}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  document.getElementById("unlockOwnerBtn").addEventListener("click", () => {
+    if (document.getElementById("ownerPinInput").value.trim() === "2026") {
+      renderOwnerLog();
+      document.getElementById("ownerUnlockedContent").classList.remove("hidden");
+    } else {
+      alert("වැරදි PIN අංකයකි.");
+    }
+  });
+})();
+</script>
+</body>
+</html>
